@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xiao Yu - Academic Homepage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css">
+    <meta name="description" content="Xiao Yu's Academic Homepage">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 基础样式 CSS --- */
+        :root {
+            --primary-color: #2c3e50; /* 深蓝灰色，学术感 */
+            --accent-color: #3498db;  /* 链接颜色 */
+            --text-color: #333;
+            --bg-color: #fff;
+            --secondary-bg: #f9f9f9;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif; /* 使用无衬线字体，更现代 */
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+        }
+
+        a { text-decoration: none; color: var(--accent-color); }
+        a:hover { text-decoration: underline; }
+
+        /* 容器限制宽度，居中 */
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        /* --- 1. 头部个人信息区 (Flexbox布局) --- */
+        .header-section {
+            display: flex;
+            align-items: flex-start; /* 顶部对齐 */
+            gap: 40px;
+            margin-bottom: 60px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 40px;
+        }
+
+        .profile-photo {
+            flex: 0 0 220px; /* 固定宽度 */
+            text-align: center;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 50%; /* 圆形头像，如果想要方形改成 8px */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .name-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .bio-text {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .section-sub-title {
+            font-weight: bold;
+            margin-top: 10px;
+            color: var(--primary-color);
+        }
+
+        /* --- 社交链接样式优化 --- */
+        .social-links {
+            display: flex;
+            gap: 20px; /* 调整图标之间的间距 */
+            margin-top: 15px;
+            flex-wrap: wrap; /* 手机上自动换行 */
+        }
+
+        /* --- 自定义 SVG 图标样式 --- */
+        .custom-icon {
+            width: 1.1em;       /* 宽度跟文字差不多大，稍微大一点点显得清楚 */
+            height: 1.1em;      
+            object-fit: contain; /* 保持图片比例 */
+            vertical-align: -0.2em; /* 微调垂直对齐，让它和文字底端对齐 */
+            margin-right: 2px;  /* 图标和文字稍微拉开点距离 */
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            gap: 6px; /* 图标和文字的间距 */
+            color: #444; /* 默认颜色深一点 */
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .social-links a:hover {
+            color: #3498db; /* 鼠标悬停变蓝 */
+            text-decoration: none;
+        }
+
+        /* 这是一个专门给小红书图标定义的样式 */
+        .icon-xhs {
+            width: 1em;
+            height: 1em;
+            fill: currentColor; /* 让 SVG 颜色跟随文字颜色 */
+            vertical-align: -0.125em;
+        }
+
+        /* --- 2. 论文列表区 --- */
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            border-left: 5px solid var(--accent-color);
+            padding-left: 10px;
+        }
+
+        /* --- 修正后的论文列表样式 --- */
+        .paper-item {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 35px;
+            align-items: flex-start; /* 顶部对齐，防止图片把高度撑乱 */
+        }
+
+        /* 【关键修改 1】给图片容器一个“绝对固定”的宽度 */
+        /* flex: 0 0 220px 意思是：不许伸缩，基准宽度固定为 220px */
+        .paper-img {
+            flex: 0 0 220px; 
+            max-width: 220px; /* 双重保险，防止被撑开 */
+        }
+
+        /* 【关键修改 2】强制裁剪图片，填满上面的容器 */
+        .paper-img img {
+            width: 100%;        /* 宽度撑满容器的 220px */
+            height: 120px;      /* 高度强制固定 120px */
+            object-fit: cover;  /* 核心代码：裁剪模式。保持比例填满，多余的切掉 */
+            border-radius: 6px;
+            border: 1px solid #eee;
+            transition: transform 0.2s;
+            display: block;     /* 消除图片底部的微小缝隙 */
+        }
+
+        /* 鼠标悬停效果 */
+        .paper-img img:hover { 
+            transform: scale(1.02); 
+        }
+
+        .paper-details {
+            flex: 1;
+        }
+
+        .paper-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .paper-authors {
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .paper-venue {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .paper-links a {
+            margin-right: 10px;
+            font-size: 0.9rem;
+            /* text-transform: uppercase; */
+            font-weight: bold;
+        }
+        
+        /* 高亮你的名字 */
+        .me {
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        /* --- 移动端适配 --- */
+        @media (max-width: 768px) {
+            .header-section {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .profile-photo { margin-bottom: 20px; }
+            .paper-item { flex-direction: column; }
+            .paper-img { width: 100%; max-width: 300px; margin: 0 auto 15px auto; }
+            .header-section { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header-section">
+        <div class="profile-photo">
+            <img src="files/avatar.jpg" alt="Xiao Yu Photo">
+        </div>
+        <div class="profile-info">
+            <div class="name-title">Xiao Yu</div>
+            <div class="bio-text">
+                <p>
+                    I am currently a Ph.D. Student at <a href="https://www.bjtu.edu.cn/" target="_blank">Beijing Jiaotong University (BJTU)</a> in <a href="http://mepro.bjtu.edu.cn/researcher.html" target="_blank">MePro</a>,
+                    co-advised by Prof. <a href="https://scholar.google.com/citations?user=OEZ816YAAAAJ&hl=en" target="_blank">Xiaojie Jin</a> and Prof. <a href="https://weiyc.github.io/" target="_blank">Yunchao Wei</a>. 
+                </p>
+                <p>
+                    My research interests primarily lie in <strong>Computer Vision</strong> and <strong>Machine Learning</strong>, with a specific focus on:
+                </p>
+                <ul>
+                    <li>World Models</li>
+                    <li>Audio-Visual Video Understanding</li>
+                    <li>Continual Learning & Multimodal Learning</li>
+                </ul>
+            </div>
+
+            <div class="section-sub-title">Education</div>
+            <ul style="padding-left: 20px; margin-top: 5px;">
+                <!-- <li>
+                    <strong>Beijing Jiaotong University</strong>, Beijing, China <br>
+                    <span style="color:#666; font-size: 0.9rem;">Ph.D. Student in Information and Communication Engineering (2023 - Present)</span> <br>
+                    <span style="color:#999; font-size: 0.85rem;">*Transferred from Master's program in 2nd year.</span>
+                </li> -->
+                <li style="margin-bottom: 10px;">
+                    <strong>M.S./Ph.D. Student</strong>, Beijing Jiaotong University <br>
+                    <span style="color: #666; font-size: 0.9em;">2024 - Present, Beijing, China</span>
+                </li>
+                <li>
+                    <strong>B.E.</strong>, Beijing Jiaotong University <br>
+                    <span style="color: #666; font-size: 0.9em;">2020 - 2024, Beijing, China</span>
+                </li>
+            </ul>
+
+            <div class="social-links">
+                <a href="mailto:xiaoyu.bjtu.edu.cn">
+                    <i class="fa-solid fa-envelope"></i> Email
+                </a>
+                /
+                <a href="https://scholar.google.com/citations?user=4UlzraMAAAAJ&hl=zh-CN" target="_blank">
+                    <i class="ai ai-google-scholar"></i> Google Scholar
+                </a>
+                /
+                <a href="https://github.com/XiaoYu-1123" target="_blank">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+                /
+                <a href="https://www.xiaohongshu.com/user/profile/64dde3b200000000010103a7" target="_blank">
+                    <img src="files/RedNote.svg" class="custom-icon" alt="Xiaohongshu">
+                    Rednote
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-header">Main Publications</div>
+
+    <!-- <div class="paper-item">
+        <div class="paper-img">
+            <img src="files/survey.png" alt="Survey Thumbnail">
+        </div>
+        <div class="paper-details">
+            <div class="paper-title">A Survey on World Models: A Vision Perspective</div>
+            <div class="paper-authors">
+                <span class="me">Xiao Yu</span>, Yichen Zhang, Mingzhang Wang, Shifang Zhao, Weizhe Liu, Yuyang Yin, Zhongwei Ren, Yao Zhao, Jiashi Feng, Shuicheng Yan, Yunchao Wei, Xiaojie Jin
+            </div>
+            <div class="paper-venue">
+                2025.11
+            </div>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 8px;">
+                Topic: World Model
+            </p>
+            <div class="paper-links">
+                <a href="https://arxiv.org/abs/2505.23155">[Paper]</a>
+                <a href="https://aiworldlab.github.io/survey/">[Project Page]</a>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="paper-item">
+        <div class="paper-img">
+            <img src="files/PreFM.png" alt="Paper Thumbnail">
+        </div>
+        <div class="paper-details">
+            <div class="paper-title">PreFM: Online Audio-Visual Event Parsing via Predictive Future Modeling</div>
+            <div class="paper-authors">
+                <span class="me">Xiao Yu</span>, Yan Fang, Xiaojie Jin, Yao Zhao, Yunchao Wei
+            </div>
+            <div class="paper-venue">
+                Advances in Neural Information Processing Systems (<strong>NeurIPS</strong>), 2025
+            </div>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 8px;">
+                Topic: Audio-Visual Video Understanding
+            </p>
+            <div class="paper-links">
+                <a href="https://arxiv.org/abs/2505.23155">[Paper]</a>
+                <a href="https://github.com/XiaoYu-1123/PreFM">[Code]</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="paper-item">
+        <div class="paper-img">
+            <img src="files/IPSeg.png" alt="Paper Thumbnail">
+        </div>
+        <div class="paper-details">
+            <div class="paper-title">IPSeg: Image Posterior Mitigates Semantic Drift in Class-Incremental Segmentation</div>
+            <div class="paper-authors">
+                <span class="me">Xiao Yu*</span>, Yan Fang*, Yao Zhao, Yunchao Wei
+            </div>
+            <div class="paper-venue">
+                Arxiv, 2025.02
+            </div>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 8px;">
+                Topic: Continual Learning
+            </p>
+            <div class="paper-links">
+                <a href="https://arxiv.org/abs/2502.04870">[Paper]</a>
+                <a href="https://github.com/YanFangCS/IPSeg">[Code]</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="section-header">Other Publications</div>
+
+    <!-- <div class="paper-item">
+        <div class="paper-img">
+            <img src="files/paper_other.jpg" alt="Thumbnail">
+        </div>
+        <div class="paper-details">
+            <div class="paper-title">Another Paper Title About Continual Learning</div>
+            <div class="paper-authors">
+                First Author, <span class="me">Xiao Yu</span>, Last Author
+            </div>
+            <div class="paper-venue">
+                Conference/Journal Name, Year
+            </div>
+            <div class="paper-links">
+                <a href="#">[PDF]</a>
+            </div>
+        </div>
+    </div> -->
+
+    <footer style="text-align: center; margin-top: 80px; padding-bottom: 30px; color: #999; font-size: 0.8rem;">
+        <p>&copy; 2025 Xiao Yu. Last updated: November 2025.</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
